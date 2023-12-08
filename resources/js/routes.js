@@ -1,8 +1,9 @@
 import Dashboard from "./components/Dashboard.vue";
-import AnnouncementsList from "./pages/Announcements/List.vue";
+import AppointmentsList from "./pages/Appointments/AppointmentsList.vue";
 import UsersList from "./pages/Users/UsersList.vue";
 import Settings from "./pages/Settings/Settings.vue";
 import Profile from "./pages/Profile/Profile.vue";
+import AppointmentForm from "./pages/Appointments/AppointmentForm.vue";
 
 let routes = [
     {
@@ -11,9 +12,14 @@ let routes = [
         component: Dashboard
     },
     {
-        path: '/admin/announcements',
-        name: 'admin.announcements',
-        component: AnnouncementsList
+        path: '/admin/appointments',
+        name: 'admin.appointments',
+        component: AppointmentsList
+    },
+    {
+        path: '/admin/appointments/create',
+        name: 'admin.appointments.create',
+        component: AppointmentForm
     },
     {
         path: '/admin/users',

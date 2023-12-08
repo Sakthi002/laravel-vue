@@ -211,6 +211,30 @@ import {ref, onMounted, reactive, watch} from "vue";
         }
     }
 
+
+    let userIdToDelete = ref(null);
+
+    const deleteUser = (id) => {
+
+        userIdToDelete.value = id;
+
+        $('#deleteUserModal').modal('show');
+    }
+
+    const onConfirmDelete = () =>{
+
+        axios.delete('/api/users/'+userIdToDelete.value).then(res=>{
+
+            toast.success('User deleted successfully');
+
+            userIdToDelete.value = null;
+
+            $('#deleteUserModal').modal('hide');
+
+            getUsers();
+        })
+    }
+
     onMounted(()=>{
 
         getUsers();
@@ -295,10 +319,10 @@ import {ref, onMounted, reactive, watch} from "vue";
                             <UserListItem v-for="(user,index) in users.data" :key="user.id"
                                 :user=user
                                 :index="index"
-                                @user-deleted="getUsers"
                                 @edit-user="editUser"
                                 @toggle-selection="toggleSelection"
                                 :select-all="selectAll"
+                                @delete-user="deleteUser"
                             >
 
                             </UserListItem>
@@ -379,6 +403,38 @@ import {ref, onMounted, reactive, watch} from "vue";
                             <button type="submit" class="btn btn-primary">Save</button>
                         </div>
                     </Form>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="modal fade" id="deleteUserModal" aria-modal="true" role="dialog" data-backdrop="static">
+
+            <div class="modal-dialog">
+
+                <div class="modal-content">
+
+                    <div class="modal-header">
+
+                        <h4 class="modal-title">Delete User</h4>
+
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+
+                            <span aria-hidden="true">×</span>
+                        </button>
+                    </div>
+
+                    <div class="modal-body">
+
+                        <span class="text-sm">Are you sure? you want delete?</span>
+                    </div>
+
+                    <div class="modal-footer justify-content-between">
+
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+
+                        <button type="button" @click.prevent="onConfirmDelete" class="btn btn-danger">Delete</button>
+                    </div>
                 </div>
             </div>
         </div>
