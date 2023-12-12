@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\AppointmentController;
 use App\Http\Controllers\Admin\AppointmentStatusController;
+use App\Http\Controllers\Admin\ClientController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\ApplicationController;
 use Illuminate\Support\Facades\Route;
@@ -33,6 +34,11 @@ Route::delete('/api/users', [UserController::class, 'bulkDelete']);
 Route::get('/api/appointments', [AppointmentController::class, 'index']);
 Route::get('/api/appointment-status', [AppointmentStatusController::class, 'getStatusWithCount']);
 Route::post('/api/appointments/create', [AppointmentController::class, 'store']);
+Route::get('/api/appointments/{appointment}/edit', [AppointmentController::class, 'edit']);
+Route::put('/api/appointments/{appointment}/edit', [AppointmentController::class, 'update']);
+Route::delete('/api/appointments/{appointment}/delete', [AppointmentController::class, 'destroy']);
+
+Route::get('/api/clients', [ClientController::class, 'index']);
 
 
 Route::get('{view}', ApplicationController::class)->where('view','(.*)');

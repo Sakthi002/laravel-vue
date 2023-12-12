@@ -6,6 +6,7 @@ use App\Enums\AppointmentStatus;
 use App\Http\Controllers\Controller;
 use App\Models\Appointment;
 use Illuminate\Http\Request;
+use Illuminate\Validation\Rule;
 
 class AppointmentController extends Controller
 {
@@ -32,15 +33,51 @@ class AppointmentController extends Controller
 
     public function store()
     {
+        $validated = request()->validate([
+            'title' => ['required'],
+            'client_id' => ['required',Rule::exists('clients','id')],
+            'description' => ['required'],
+            'start_time' => ['required'],
+            'end_time' => ['required']
+        ]);
+
         Appointment::create([
-           'title' => \request('title'),
-           'description' => \request('description'),
-           'client_id' => 1,
-           'start_time' => now(),
-           'end_time' => now(),
+           'title' => $validated['title'],
+           'description' => $validated['description'],
+           'client_id' => $validated['client_id'],
+           'start_time' => $validated['start_time'],
+           'end_time' => $validated['end_time'],
             'status' => AppointmentStatus::SCHEDULED
         ]);
 
         return response()->json(['message' => 'success']);
+    }
+
+    public function edit(Appointment $appointment)
+    {
+        return $appointment;
+    }
+
+    public function update(Appointment $appointment)
+    {
+
+        $validated = request()->validate([
+            'title' => ['required'],
+            'client_id' => ['required',Rule::exists('clients','id')],
+            'description' => ['required'],
+            'start_time' => ['required'],
+            'end_time' => ['required']
+        ]);
+
+        $appointment->update($validated);
+
+        return response()->json(['message' => 'updated']);
+    }
+
+    public function destroy(Appointment $appointment)
+    {
+        $appointment->delete();
+
+        return response()->json(['message' => 'deleted']);
     }
 }

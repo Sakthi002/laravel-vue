@@ -26,7 +26,11 @@ import {ref, onMounted, reactive, watch} from "vue";
 
     function getUsers(page = 1) {
 
-        axios.get(`/api/users?page=`+page).then(res=>{
+        axios.get(`/api/users?page=`+page,{
+            params:{
+                query : searchQuery.value
+            }
+        }).then(res=>{
 
             users.value = res.data;
 
@@ -129,20 +133,8 @@ import {ref, onMounted, reactive, watch} from "vue";
 
     watch(searchQuery, debounce(()=>{
 
-        search();
+        getUsers();
     },300));
-
-    const search = ()=>{
-
-        axios.get('/api/users/search',{
-            params:{
-                query : searchQuery.value
-            }
-        }).then(res=>{
-
-            users.value = res.data;
-        })
-    }
 
     const showCreateModal = () =>{
 

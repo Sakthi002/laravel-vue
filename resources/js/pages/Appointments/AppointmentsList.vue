@@ -1,8 +1,10 @@
 <script setup>
 
-import {computed, onMounted, ref} from "vue";
+    import {computed, onMounted, ref} from "vue";
 
     import {Bootstrap5Pagination} from "laravel-vue-pagination";
+
+    import Swal from 'sweetalert2'
 
     const appointmentStatus = ref([]);
 
@@ -34,6 +36,35 @@ import {computed, onMounted, ref} from "vue";
         axios.get('/api/appointments?page='+page, { params : params }).then(res=>{
 
            appointments.value = res.data;
+        });
+    }
+
+    const deleteAppointment = (id) =>{
+
+        Swal.fire({
+            title: "Are you sure?",
+            text: "You won't be able to revert this!",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#3085d6",
+            cancelButtonColor: "#d33",
+            confirmButtonText: "Yes, delete it!"
+        }).then((result) => {
+            if (result.isConfirmed) {
+
+                axios.delete(`/api/appointments/${id}/delete`).then(res=>{
+
+                    Swal.fire({
+                        title: "Deleted!",
+                        text: "Your file has been deleted.",
+                        icon: "success"
+                    });
+
+                    getAppointmentStatus();
+
+                    getAppointments(1, currentStatus.value)
+                });
+            }
         });
     }
 
@@ -162,11 +193,11 @@ import {computed, onMounted, ref} from "vue";
 
                                     <td>
 
-                                        <a href="">
+                                        <router-link :to="`/admin/appointments/${appointment.id}/edit`">
                                             <i class="fa fa-edit mr-2"></i>
-                                        </a>
+                                        </router-link>
 
-                                        <a href="">
+                                        <a href="javascript:;" @click="deleteAppointment(appointment.id)">
                                             <i class="fa fa-trash text-danger"></i>
                                         </a>
                                     </td>

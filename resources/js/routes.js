@@ -22,6 +22,11 @@ let routes = [
         component: AppointmentForm
     },
     {
+        path: '/admin/appointments/:id/edit',
+        name: 'admin.appointments.edit',
+        component: AppointmentForm
+    },
+    {
         path: '/admin/users',
         name: 'admin.users',
         component: UsersList
