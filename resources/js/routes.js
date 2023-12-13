@@ -4,8 +4,14 @@ import UsersList from "./pages/Users/UsersList.vue";
 import Settings from "./pages/Settings/Settings.vue";
 import Profile from "./pages/Profile/Profile.vue";
 import AppointmentForm from "./pages/Appointments/AppointmentForm.vue";
+import Login from "./pages/Auth/Login.vue";
 
 let routes = [
+    {
+        path: '/login',
+        name: 'admin.login',
+        component: Login
+    },
     {
         path: '/admin/dashboard',
         name: 'admin.dashboard',
